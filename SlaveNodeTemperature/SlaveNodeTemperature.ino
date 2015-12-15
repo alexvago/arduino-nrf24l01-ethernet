@@ -1,8 +1,7 @@
 
 /*
-* Getting Started example sketch for nRF24L01+ radios
-* This is an example of how to send data from one node to another using data structures
-* Updated: Dec 2014 by TMRh20
+*  Scketch for Slave node, who receives sensors' data, collects it and sends it to
+*  Master node through NRF24L01+
 */
 
 #include <SPI.h>
@@ -21,17 +20,12 @@ RF24 radio(9,10);
 /**********************************************************/
 
 
-// Used to control whether this node is sending or receiving
-bool role = 1;
-
 /**
 * Create a data structure for transmitting and receiving data
-* This allows many variables to be easily sent and received in a single transmission
-* See http://www.cplusplus.com/doc/tutorial/structures/
 */
 struct dataStruct{
   unsigned long _micros;
-  float value;
+  float value = 0;
 }myData;
 
 void setup() {
@@ -46,15 +40,11 @@ void setup() {
  // getting_started sketch, and the likelihood of close proximity of the devices. RF24_PA_MAX is default.
   radio.setPALevel(RF24_PA_LOW);
   
-  // Open a writing and reading pipe on each radio, with opposite addresses
-
-  radio.openWritingPipe(addresses[1]);
+  //Open reading pipe
   radio.openReadingPipe(1,addresses[0]);
 
   radio.printDetails();
-  
-  myData.value =0;
-  
+
 }
 
 
